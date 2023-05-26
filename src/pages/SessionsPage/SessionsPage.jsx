@@ -1,47 +1,53 @@
+import { Link, useParams } from "react-router-dom";
+import { useState, useEffect } from 'react';
 import styled from "styled-components"
+import axios from "axios"
 
 export default function SessionsPage() {
 
-    return (
+    let [info,setInfo] = useState([]);
+    let [sessoes,setSessoes] = useState([]);
+    const params = useParams();
+    const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${params.idfilme}/showtimes`;
+
+    useEffect(() => {
+		const requisicao = axios.get(url);
+		requisicao.then(resposta => {
+			setInfo(resposta.data);
+            console.log(resposta.data);
+            setSessoes(resposta.data.days);
+		});
+	}, []);
+    if(info.id > 0) {
+        return (
         <PageContainer>
+            
             Selecione o horário
-            <div>
-                <SessionContainer>
-                    Sexta - 03/03/2023
+            {sessoes.map(sessao => 
+                <SessionContainer key={sessao.id}>
+                    {sessao.weekday} - {sessao.date}
                     <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
+                        <Link to={`/Assentos/${sessao.showtimes[0].id}`}>
+                            <button>{sessao.showtimes[0].name}</button>
+                        </Link>
+                        <Link to={`/Assentos/${sessao.showtimes[1].id}`}>
+                            <button>{sessao.showtimes[1].name}</button>
+                        </Link>
                     </ButtonsContainer>
                 </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-            </div>
+                )}
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={info.posterURL} alt={info.title} />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{info.title} <br/> {info.overview}</p>
                 </div>
             </FooterContainer>
 
         </PageContainer>
-    )
+    )}
 }
 
 const PageContainer = styled.div`
@@ -109,10 +115,8 @@ const FooterContainer = styled.div`
         flex-direction: column;
         align-items: flex-start;
         p {
+            margin-top: 0px;
             text-align: left;
-            &:nth-child(2) {
-                margin-top: 10px;
-            }
         }
     }
 `

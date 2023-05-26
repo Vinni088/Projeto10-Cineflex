@@ -1,32 +1,46 @@
+import { Link, useParams } from "react-router-dom"
 import styled from "styled-components"
 
 export default function SeatsPage() {
+    const assentos = 
+    [
+        '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
+        '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+        '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
+        '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
+        '41', '42', '43', '44', '45', '46', '47', '48', '49', '50'
+    ];
+    let params = useParams;
+    const url = `
+    https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params}/seats
+    `;
+    
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                <SeatItem>01</SeatItem>
-                <SeatItem>02</SeatItem>
-                <SeatItem>03</SeatItem>
-                <SeatItem>04</SeatItem>
-                <SeatItem>05</SeatItem>
+                {assentos.map(assento => <SeatItem key={assento}>{assento}</SeatItem>)}
             </SeatsContainer>
 
             <CaptionContainer>
+
                 <CaptionItem>
                     <CaptionCircle />
                     Selecionado
                 </CaptionItem>
+                
                 <CaptionItem>
                     <CaptionCircle />
                     Disponível
                 </CaptionItem>
+
                 <CaptionItem>
                     <CaptionCircle />
                     Indisponível
                 </CaptionItem>
+
             </CaptionContainer>
 
             <FormContainer>
@@ -36,7 +50,7 @@ export default function SeatsPage() {
                 CPF do Comprador:
                 <input placeholder="Digite seu CPF..." />
 
-                <button>Reservar Assento(s)</button>
+                <Link to={"/"}> <button>Reservar Assento(s)</button> </Link> 
             </FormContainer>
 
             <FooterContainer>

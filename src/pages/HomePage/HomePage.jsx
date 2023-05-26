@@ -1,6 +1,7 @@
+import { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import styled from "styled-components"
 import axios from "axios"
-import { useState, useEffect } from 'react';
 
 export default function HomePage() {
 
@@ -13,15 +14,19 @@ export default function HomePage() {
 			setThumbs(resposta.data);
 		});
 	}, []);
+
     return (
         <PageContainer>
             Selecione o filme
 
             <ListContainer>
-                {thumbs.map(thumb => 
-                <MovieContainer key={thumb.id}>
-                    <img src={thumb.posterURL} alt={thumb.title}/>
-                </MovieContainer> )}
+                {thumbs.map((thumb,index) => 
+                <Link key={index} onClick={() => QualFilme(thumb.id)} to={`/sessoes/${thumb.id}`} >
+                    <MovieContainer  id={thumb.id}>
+                        <img src={thumb.posterURL} alt={thumb.title}/>
+                    </MovieContainer> 
+                </Link>
+                )}
             </ListContainer>
 
         </PageContainer>
