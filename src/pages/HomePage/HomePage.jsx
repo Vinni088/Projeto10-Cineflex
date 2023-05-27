@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import loading from "../../assets/loading.gif" 
 import { Link } from "react-router-dom";
 import styled from "styled-components"
 import axios from "axios"
 
 export default function HomePage() {
 
-    const [thumbs, setThumbs] = useState([]);
+    const [thumbs, setThumbs] = useState(null);
     useEffect(() => {
 		const requisicao = axios.get("https://mock-api.driven.com.br/api/v8/cineflex/movies");
 
@@ -15,7 +16,15 @@ export default function HomePage() {
 		});
 	}, []);
 
-    return (
+    if(thumbs === null) {
+        return(
+        <Loading>
+            <img src={loading} alt="Carregando Sua Página :D" />
+            <h1> Carregando sua pagina </h1>
+        </Loading>);
+    }
+    if(thumbs !== null) {
+        return (
         <PageContainer>
             Selecione o filme
 
@@ -30,7 +39,7 @@ export default function HomePage() {
             </ListContainer>
 
         </PageContainer>
-    )
+    )}
 }
 
 const PageContainer = styled.div`
@@ -65,3 +74,20 @@ const MovieContainer = styled.div`
         height: 190px;
     }
 `
+const Loading = styled.div`
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img {
+        width: 30%;
+    }
+    h1 {
+        font-family: 'Roboto';
+        font-size: 24px;
+        text-align: center;
+        color: #293845;
+    }
+    `

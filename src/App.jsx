@@ -5,12 +5,10 @@ import SessionsPage from "./pages/SessionsPage/SessionsPage"
 import SuccessPage from "./pages/SuccessPage/SuccessPage"
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios"
-import { useState } from "react"
 
 export default function App() {
 
     axios.defaults.headers.common['Authorization'] = 'nuyTwtCpgWNbJvaNSSgr6jgJ';
-    let [id, SetId] = useState('');
 
     return (
         <BrowserRouter>
@@ -19,16 +17,14 @@ export default function App() {
 				<Route path="/" element={<HomePage />} />
                 <Route path="/sessoes/:idfilme" element={<SessionsPage />}/>
                 <Route path="/assentos/:idSessao" element={<SeatsPage />}/>
-                <Route path="/Check-out" element={<SuccessPage />}/>
+                <Route path="/sucesso" element={<SuccessPage />}/>
 			</Routes>
-            
-
         </BrowserRouter>
     )
 }
 
 const NavContainer = styled.div`
-    width: 100%;
+    width: 100vw;
     height: 70px;
     display: flex;
     align-items: center;
@@ -39,6 +35,7 @@ const NavContainer = styled.div`
     font-size: 34px;
     position: fixed;
     top: 0;
+    left: 0;
     a {
         text-decoration: none;
         color: #E8833A;

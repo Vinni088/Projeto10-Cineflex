@@ -1,43 +1,64 @@
+import axios from "axios";
+import loading from "../../assets/loading.gif"
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import styled from "styled-components"
 
 export default function SeatsPage() {
-    const assentos = 
-    [
-        '01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
-        '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-        '21', '22', '23', '24', '25', '26', '27', '28', '29', '30',
-        '31', '32', '33', '34', '35', '36', '37', '38', '39', '40',
-        '41', '42', '43', '44', '45', '46', '47', '48', '49', '50'
-    ];
-    let params = useParams;
-    const url = `
-    https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params}/seats
-    `;
-    
+    let [info, setInfo] = useState(null);
+    let [select, setSelect] = useState(null);
+    let [assentos,setAssentos] = useState(null);
+    let params = useParams();
+    const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params.idSessao}/seats`;
 
-    return (
+    useEffect(() => {
+        const requisicao = axios.get(url);
+        requisicao.then(resposta => {
+            setInfo(resposta.data); 
+            setAssentos(resposta.data.seats);
+            console.log(resposta.data);
+        });
+    },[])
+    
+    if(info === null) {
+        return(
+            <Loading>
+                <img src={loading} alt="Carregando Sua Página :D" />
+                <h1> Carregando sua pagina </h1>
+            </Loading>);
+    } //loading phase
+
+    function MarcarAssento(numero, vazio){
+        if(vazio){
+            alert(`Assento ${numero} selecionado!`);
+        }
+    }
+    if( info !== null ) {return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                {assentos.map(assento => <SeatItem key={assento}>{assento}</SeatItem>)}
+                {assentos.map(assento => 
+                    <SeatItem onClick={() => MarcarAssento(assento.name, assento.isAvailable)} vazio={assento.isAvailable} key={assento.id}>
+                        {assento.name}
+                    </SeatItem>
+                )}
             </SeatsContainer>
 
             <CaptionContainer>
 
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color='#1AAE9E' border='#0E7D71' />
                     Selecionado
                 </CaptionItem>
                 
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color='#C3CFD9' border='#7B8B99' />
                     Disponível
                 </CaptionItem>
 
                 <CaptionItem>
-                    <CaptionCircle />
+                    <CaptionCircle color='#FBE192' border='#F7C52B' />
                     Indisponível
                 </CaptionItem>
 
@@ -55,16 +76,16 @@ export default function SeatsPage() {
 
             <FooterContainer>
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={info.movie.posterURL} alt={info.movie.title} />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
-                    <p>Sexta - 14h00</p>
+                    <p>{info.movie.title}</p>
+                    <p>{info.day.weekday} - {info.name}</p>
                 </div>
             </FooterContainer>
 
         </PageContainer>
-    )
+    )}
 }
 
 const PageContainer = styled.div`
@@ -110,15 +131,20 @@ const CaptionContainer = styled.div`
     margin: 20px;
 `
 const CaptionCircle = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
-    height: 25px;
-    width: 25px;
-    border-radius: 25px;
+
+    border: 1px solid ${props => props.border};        // Essa cor deve mudar
+    background: ${props => props.color};    // Essa cor deve mudar
+    height: 26px;
+    width: 26px;
+    border-radius: 12px;
+    font-family: 'Roboto';
+    font-size: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
+
+    box-sizing: border-box;
 `
 const CaptionItem = styled.div`
     display: flex;
@@ -127,17 +153,20 @@ const CaptionItem = styled.div`
     font-size: 12px;
 `
 const SeatItem = styled.div`
-    border: 1px solid blue;         // Essa cor deve mudar
-    background-color: lightblue;    // Essa cor deve mudar
-    height: 25px;
-    width: 25px;
-    border-radius: 25px;
+    border: 1px solid ${props => props.vazio? '#7B8B99':'#F7C52B'};        // Essa cor deve mudar
+    background: ${props => props.vazio? '#C3CFD9' :'#FBE192'};    // Essa cor deve mudar
+    height: 26px;
+    width: 26px;
+    border-radius: 12px;
     font-family: 'Roboto';
     font-size: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
+
+    box-sizing: border-box;
+
 `
 const FooterContainer = styled.div`
     width: 100%;
@@ -177,3 +206,21 @@ const FooterContainer = styled.div`
         }
     }
 `
+const Loading = styled.div`
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+    img {
+        width: 30%;
+    }
+    h1 {
+        font-family: 'Roboto';
+        font-size: 24px;
+        text-align: center;
+        color: #293845;
+    }
+    `

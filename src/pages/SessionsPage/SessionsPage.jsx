@@ -1,11 +1,12 @@
 import { Link, useParams } from "react-router-dom";
+import loading from "../../assets/loading.gif" 
 import { useState, useEffect } from 'react';
 import styled from "styled-components"
 import axios from "axios"
 
 export default function SessionsPage() {
 
-    let [info,setInfo] = useState([]);
+    let [info,setInfo] = useState(null);
     let [sessoes,setSessoes] = useState([]);
     const params = useParams();
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${params.idfilme}/showtimes`;
@@ -16,9 +17,18 @@ export default function SessionsPage() {
 			setInfo(resposta.data);
             console.log(resposta.data);
             setSessoes(resposta.data.days);
-		});
+		})
 	}, []);
-    if(info.id > 0) {
+
+    if(info === null) {
+        return(
+            <Loading>
+                <img src={loading} alt="Carregando Sua Página :D" />
+                <h1> Carregando sua pagina </h1>
+            </Loading>);
+    } //Loading phase
+
+    if(info !== null) {
         return (
         <PageContainer>
             
@@ -28,10 +38,10 @@ export default function SessionsPage() {
                     {sessao.weekday} - {sessao.date}
                     <ButtonsContainer>
                         <Link to={`/Assentos/${sessao.showtimes[0].id}`}>
-                            <button>{sessao.showtimes[0].name}</button>
+                            <BotãoSessão>{sessao.showtimes[0].name}</BotãoSessão>
                         </Link>
                         <Link to={`/Assentos/${sessao.showtimes[1].id}`}>
-                            <button>{sessao.showtimes[1].name}</button>
+                            <BotãoSessão>{sessao.showtimes[1].name}</BotãoSessão>
                         </Link>
                     </ButtonsContainer>
                 </SessionContainer>
@@ -42,7 +52,7 @@ export default function SessionsPage() {
                     <img src={info.posterURL} alt={info.title} />
                 </div>
                 <div>
-                    <p>{info.title} <br/> {info.overview}</p>
+                   <p>{info.title} <br/> {info.overview}</p> 
                 </div>
             </FooterContainer>
 
@@ -67,7 +77,7 @@ const PageContainer = styled.div`
 const SessionContainer = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     font-family: 'Roboto';
     font-size: 20px;
     color: #293845;
@@ -75,14 +85,15 @@ const SessionContainer = styled.div`
 `
 const ButtonsContainer = styled.div`
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: row;
     margin: 20px 0;
-    button {
-        margin-right: 20px;
-    }
+    gap: 20px;
     a {
         text-decoration: none;
     }
+
 `
 const FooterContainer = styled.div`
     width: 100%;
@@ -96,6 +107,7 @@ const FooterContainer = styled.div`
     bottom: 0;
 
     div:nth-child(1) {
+        width: 50px;
         box-shadow: 0px 2px 4px 2px #0000001A;
         border-radius: 3px;
         display: flex;
@@ -114,9 +126,40 @@ const FooterContainer = styled.div`
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        overflow: hidden;
+        height: 100px;
         p {
             margin-top: 0px;
             text-align: left;
+            word-wrap: break-word;
         }
     }
+`
+const Loading = styled.div`
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 80px;
+    img {
+        width: 30%;
+    }
+    h1 {
+        font-family: 'Roboto';
+        font-size: 24px;
+        text-align: center;
+        color: #293845;
+    }
+    `
+const BotãoSessão = styled.button`
+    width: 83px;
+    height: 43px;
+
+    background: #E8833A;
+    border: 0px solid white;
+    border-radius: 3px;
+
+    cursor: pointer;
 `
