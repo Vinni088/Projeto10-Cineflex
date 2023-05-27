@@ -6,7 +6,7 @@ import styled from "styled-components"
 
 export default function SeatsPage() {
     let [info, setInfo] = useState(null);
-    let [select, setSelect] = useState(null);
+    let [select, setSelect] = useState([]);
     let [assentos,setAssentos] = useState(null);
     let params = useParams();
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params.idSessao}/seats`;
@@ -29,8 +29,20 @@ export default function SeatsPage() {
     } //loading phase
 
     function MarcarAssento(numero, vazio){
+        console.log(vazio);
         if(vazio){
-            alert(`Assento ${numero} selecionado!`);
+            if(select.includes(numero)){
+                let NewArr = [...select];
+                let index = NewArr.indexOf(numero);
+                NewArr.splice(index, 1);
+                console.log(NewArr);
+                setSelect(NewArr);
+            } else {
+                let NewArr = [...select, numero];
+                console.log(NewArr);
+                setSelect(NewArr); 
+            }
+            
         }
     }
     if( info !== null ) {return (
@@ -39,7 +51,8 @@ export default function SeatsPage() {
 
             <SeatsContainer>
                 {assentos.map(assento => 
-                    <SeatItem onClick={() => MarcarAssento(assento.name, assento.isAvailable)} vazio={assento.isAvailable} key={assento.id}>
+                    <SeatItem onClick={() => MarcarAssento(assento.name, assento.isAvailable)} 
+                    vazio={assento.isAvailable} key={assento.id} numero={assento.name} select={select}>
                         {assento.name}
                     </SeatItem>
                 )}
@@ -153,8 +166,7 @@ const CaptionItem = styled.div`
     font-size: 12px;
 `
 const SeatItem = styled.div`
-    border: 1px solid ${props => props.vazio? '#7B8B99':'#F7C52B'};        // Essa cor deve mudar
-    background: ${props => props.vazio? '#C3CFD9' :'#FBE192'};    // Essa cor deve mudar
+
     height: 26px;
     width: 26px;
     border-radius: 12px;
@@ -164,9 +176,24 @@ const SeatItem = styled.div`
     align-items: center;
     justify-content: center;
     margin: 5px 3px;
-
     box-sizing: border-box;
 
+    border: 1px solid ${props => {
+    if (props.vazio && !props.select.includes(props.numero)) {
+        return('#7B8B99')
+    } else if(props.vazio && props.select.includes(props.numero)) {
+        return('#0E7D71');
+    } else {
+        return('#F7C52B')
+    }}};        // Essa cor deve mudar
+    background: ${props => {
+    if (props.vazio && !props.select.includes(props.numero)) {
+        return('#C3CFD9')
+    } else if(props.vazio && props.select.includes(props.numero)) {
+        return('#1AAE9E');
+    } else {
+        return('#FBE192')
+    }}};     // Essa cor deve mudar
 `
 const FooterContainer = styled.div`
     width: 100%;
