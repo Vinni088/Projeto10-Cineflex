@@ -1,6 +1,7 @@
 import styled from "styled-components"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 export default function SuccessPage() {
+    const navigate = useNavigate();
     console.log(useLocation().state);
     let dados = useLocation().state;
     let assentos = [];
@@ -14,24 +15,24 @@ export default function SuccessPage() {
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
                 <p>{dados.info.movie.title}</p>
                 <p>{dados.info.day.date} - {dados.info.day.weekday}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
                 {assentos.map((numero) => <p>Assento {numero}</p>)}
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
                 <p>Nome: {dados.objeto.name}</p>
                 <p>CPF: {dados.objeto.cpf}</p>
             </TextContainer>
 
-            <button>Voltar para Home</button>
+            <button onClick={() => navigate('/')} data-test="go-home-btn">Voltar para Home</button>
         </PageContainer>
     )
 }

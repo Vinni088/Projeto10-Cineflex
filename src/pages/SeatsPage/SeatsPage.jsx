@@ -64,14 +64,14 @@ export default function SeatsPage() {
     }
     if( info !== null ) {return (
         <PageContainer>
-            <Back>
-                <img onClick={() => navigate(-1)} src={voltar} alt='Voltar à pagina anterior' />
+            <Back onClick={() => navigate(-1)} data-test="go-home-header-btn">
+                <img  src={voltar} alt='Voltar à pagina anterior' />
             </Back>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
                 {assentos.map(assento => 
-                    <SeatItem onClick={() => MarcarAssento(assento.id, assento.isAvailable)} 
+                    <SeatItem data-test="seat" onClick={() => MarcarAssento(assento.id, assento.isAvailable)} 
                     vazio={assento.isAvailable} key={assento.id} numero={assento.id} select={select}>
                         {assento.name}
                     </SeatItem>
@@ -99,22 +99,22 @@ export default function SeatsPage() {
 
             <FormContainer>
                 <form onSubmit={Enviar}>
-                    <input 
+                    <input data-test="client-name"
                     type="name" value={name} 
                     placeholder="Digite seu nome"
                     onChange={e => setName(e.target.value)} />
 
-                    <input 
+                    <input data-test="client-cpf"
                     type="cpf" value={cpf}
                     placeholder="Digite seu CPF" 
                     onChange={e => setCPF(e.target.value)} />
                     
-                    <button type="submit">Reservar Assento(s)</button> 
+                    <button data-test="book-seat-btn" type="submit">Reservar Assento(s)</button> 
 
                 </form>
             </FormContainer>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={info.movie.posterURL} alt={info.movie.title} />
                 </div>

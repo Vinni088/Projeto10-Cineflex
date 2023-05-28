@@ -30,7 +30,7 @@ export default function HomePage() {
 
             <ListContainer>
                 {thumbs.map((thumb,index) => 
-                <Link key={index} onClick={() => QualFilme(thumb.id)} to={`/sessoes/${thumb.id}`} >
+                <Link data-test="movie" key={index} onClick={() => QualFilme(thumb.id)} to={`/sessoes/${thumb.id}`} >
                     <MovieContainer  id={thumb.id}>
                         <img src={thumb.posterURL} alt={thumb.title}/>
                     </MovieContainer> 

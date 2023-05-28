@@ -33,31 +33,31 @@ export default function SessionsPage() {
     if(info !== null) {
         return (
         <PageContainer>
-            <Back>
-                <img onClick={() => navigate(-1)} src={voltar} alt='Voltar à pagina anterior' />
+            <Back onClick={() => navigate(-1)} data-test="go-home-header-btn">
+                <img   src={voltar} alt='Voltar à pagina anterior' />
             </Back>
             
             Selecione o horário
             {sessoes.map(sessao => 
-                <SessionContainer key={sessao.id}>
+                <SessionContainer data-test="movie-day" key={sessao.id}>
                     {sessao.weekday} - {sessao.date}
                     <ButtonsContainer>
-                        <Link to={`/Assentos/${sessao.showtimes[0].id}`}>
+                        <Link data-test="showtime" to={`/Assentos/${sessao.showtimes[0].id}`}>
                             <BotãoSessão>{sessao.showtimes[0].name}</BotãoSessão>
                         </Link>
-                        <Link to={`/Assentos/${sessao.showtimes[1].id}`}>
+                        <Link data-test="showtime" to={`/Assentos/${sessao.showtimes[1].id}`}>
                             <BotãoSessão>{sessao.showtimes[1].name}</BotãoSessão>
                         </Link>
                     </ButtonsContainer>
                 </SessionContainer>
                 )}
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
                     <img src={info.posterURL} alt={info.title} />
                 </div>
                 <div>
-                   <p>{info.title} <br/> {info.overview}</p> 
+                   <p>{info.title} {/*<br/> {info.overview}*/}</p> 
                 </div>
             </FooterContainer>
 
