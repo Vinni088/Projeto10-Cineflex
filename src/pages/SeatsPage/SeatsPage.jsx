@@ -2,8 +2,8 @@ import axios from "axios";
 import voltar from "../../assets/return.png";
 import loading from "../../assets/loading.gif";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
-import styled from "styled-components"
+import { useNavigate, useParams } from "react-router-dom";
+import styled from "styled-components";
 
 export default function SeatsPage() {
     let [info, setInfo] = useState(null);
