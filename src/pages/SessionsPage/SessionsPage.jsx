@@ -42,7 +42,7 @@ export default function SessionsPage() {
                 <SessionContainer data-test="movie-day" key={sessao.id}>
                     {sessao.weekday} - {sessao.date}
                     <ButtonsContainer>
-                        <Link data-test="showtime" to={`/Assentos/${sessao.showtimes[0].id}`}>
+                        <Link data-test="showtime" to={`/assentos/${sessao.showtimes[0].id}`}>
                             <BotãoSessão>{sessao.showtimes[0].name}</BotãoSessão>
                         </Link>
                         <Link data-test="showtime" to={`/Assentos/${sessao.showtimes[1].id}`}>
