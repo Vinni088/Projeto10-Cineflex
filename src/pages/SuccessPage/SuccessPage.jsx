@@ -15,10 +15,10 @@ export default function SuccessPage() {
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer data-test="movie-info">
+            <TextContainer data-test="movie-info" >
                 <strong><p>Filme e sessão</p></strong>
                 <p>{dados.info.movie.title}</p>
-                <p>{dados.info.day.date} - {dados.info.day.weekday}</p>
+                <p>{dados.info.day.date}  {dados.info.name}</p>
             </TextContainer>
 
             <TextContainer data-test="seats-info">

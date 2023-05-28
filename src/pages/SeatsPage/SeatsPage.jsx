@@ -46,10 +46,8 @@ export default function SeatsPage() {
                 console.log(NewArr);
                 setSelect(NewArr); 
             }
-        if(!vazio){
+        } else {
             alert("Esse assento não está disponível");
-        }
-            
         }
     }
     function Enviar(e) {
