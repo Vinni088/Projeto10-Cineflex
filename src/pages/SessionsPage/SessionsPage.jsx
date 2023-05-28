@@ -45,7 +45,7 @@ export default function SessionsPage() {
                         <Link data-test="showtime" to={`/assentos/${sessao.showtimes[0].id}`}>
                             <BotãoSessão>{sessao.showtimes[0].name}</BotãoSessão>
                         </Link>
-                        <Link data-test="showtime" to={`/Assentos/${sessao.showtimes[1].id}`}>
+                        <Link data-test="showtime" to={`/assentos/${sessao.showtimes[1].id}`}>
                             <BotãoSessão>{sessao.showtimes[1].name}</BotãoSessão>
                         </Link>
                     </ButtonsContainer>
