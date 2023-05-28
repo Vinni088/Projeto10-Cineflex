@@ -1,14 +1,18 @@
 import axios from "axios";
-import loading from "../../assets/loading.gif"
+import voltar from "../../assets/return.png";
+import loading from "../../assets/loading.gif";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import styled from "styled-components"
 
 export default function SeatsPage() {
     let [info, setInfo] = useState(null);
     let [select, setSelect] = useState([]);
+    let [name, setName] = useState('');
+    let [cpf, setCPF] = useState('');
     let [assentos,setAssentos] = useState(null);
     let params = useParams();
+    let navigate = useNavigate();
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${params.idSessao}/seats`;
 
     useEffect(() => {
@@ -42,17 +46,33 @@ export default function SeatsPage() {
                 console.log(NewArr);
                 setSelect(NewArr); 
             }
+        if(!vazio){
+            alert("Esse assento não está disponível");
+        }
             
         }
     }
+    function Enviar(e) {
+        e.preventDefault();
+        let objeto = {name: name, cpf: cpf, ids: select}
+        const req = axios.post("https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many", objeto);
+        req.then(resposta => 
+            console.log(resposta),
+            navigate('/sucesso', {state: {info, objeto}})
+        );
+        req.catch(resposta => console.log(resposta));
+    }
     if( info !== null ) {return (
         <PageContainer>
+            <Back>
+                <img onClick={() => navigate(-1)} src={voltar} alt='Voltar à pagina anterior' />
+            </Back>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
                 {assentos.map(assento => 
-                    <SeatItem onClick={() => MarcarAssento(assento.name, assento.isAvailable)} 
-                    vazio={assento.isAvailable} key={assento.id} numero={assento.name} select={select}>
+                    <SeatItem onClick={() => MarcarAssento(assento.id, assento.isAvailable)} 
+                    vazio={assento.isAvailable} key={assento.id} numero={assento.id} select={select}>
                         {assento.name}
                     </SeatItem>
                 )}
@@ -78,13 +98,20 @@ export default function SeatsPage() {
             </CaptionContainer>
 
             <FormContainer>
-                Nome do Comprador:
-                <input placeholder="Digite seu nome..." />
+                <form onSubmit={Enviar}>
+                    <input 
+                    type="name" value={name} 
+                    placeholder="Digite seu nome"
+                    onChange={e => setName(e.target.value)} />
 
-                CPF do Comprador:
-                <input placeholder="Digite seu CPF..." />
+                    <input 
+                    type="cpf" value={cpf}
+                    placeholder="Digite seu CPF" 
+                    onChange={e => setCPF(e.target.value)} />
+                    
+                    <button type="submit">Reservar Assento(s)</button> 
 
-                <Link to={"/"}> <button>Reservar Assento(s)</button> </Link> 
+                </form>
             </FormContainer>
 
             <FooterContainer>
@@ -134,6 +161,20 @@ const FormContainer = styled.div`
     }
     input {
         width: calc(100vw - 60px);
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        input {
+            box-sizing: border-box;
+
+            background: #FFFFFF;
+            border: 1px solid #D5D5D5;
+            border-radius: 3px;
+        }
     }
 `
 const CaptionContainer = styled.div`
@@ -250,4 +291,13 @@ const Loading = styled.div`
         text-align: center;
         color: #293845;
     }
-    `
+`
+const Back = styled.div`
+    position: fixed;
+    top: 90px;
+    left: 40px;
+    img {
+        height: 50px;
+        width: 50px;
+    }
+`

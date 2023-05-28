@@ -1,6 +1,7 @@
-import { Link, useParams } from "react-router-dom";
-import loading from "../../assets/loading.gif" 
+import { Link, useNavigate, useParams } from "react-router-dom";
+import loading from "../../assets/loading.gif";
 import { useState, useEffect } from 'react';
+import voltar from "../../assets/return.png";
 import styled from "styled-components"
 import axios from "axios"
 
@@ -10,7 +11,8 @@ export default function SessionsPage() {
     let [sessoes,setSessoes] = useState([]);
     const params = useParams();
     const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${params.idfilme}/showtimes`;
-
+    const navigate = useNavigate();
+    
     useEffect(() => {
 		const requisicao = axios.get(url);
 		requisicao.then(resposta => {
@@ -31,6 +33,9 @@ export default function SessionsPage() {
     if(info !== null) {
         return (
         <PageContainer>
+            <Back>
+                <img onClick={() => navigate(-1)} src={voltar} alt='Voltar à pagina anterior' />
+            </Back>
             
             Selecione o horário
             {sessoes.map(sessao => 
@@ -162,4 +167,11 @@ const BotãoSessão = styled.button`
     border-radius: 3px;
 
     cursor: pointer;
+`
+const Back = styled.div`
+    position: fixed;
+    top: 80px;
+    left: 40px;
+    height: 50px;
+    width: 50px;
 `
